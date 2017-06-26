@@ -9946,15 +9946,20 @@ declare module egret {
      */
     let $ticker: sys.SystemTicker;
     namespace lifecycle {
-        type LifecyclePlugin = (context: typeof lifecycle.context) => void;
+        type LifecyclePlugin = (context: LifecycleContext) => void;
         /**
          * @private
          */
         let stage: egret.Stage;
-        let context: {
-            onPause: () => void;
-            onResume: () => void;
-        };
+        /**
+         * @private
+         */
+        let contexts: LifecycleContext[];
+        class LifecycleContext {
+            pause(): void;
+            resume(): void;
+            onUpdate?: () => void;
+        }
         let onResume: () => void;
         let onPause: () => void;
         function addLifecycleListener(plugin: LifecyclePlugin): void;
