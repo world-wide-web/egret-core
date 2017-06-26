@@ -1539,7 +1539,7 @@ var egret;
             this.$stage = stage;
             this.$nestLevel = nestLevel;
             this.$hasAddToStage = true;
-            egret.Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
+            egret.DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
         };
         /**
          * @private
@@ -1547,7 +1547,7 @@ var egret;
          */
         DisplayObject.prototype.$onRemoveFromStage = function () {
             this.$nestLevel = 0;
-            egret.Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+            egret.DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         };
         Object.defineProperty(DisplayObject.prototype, "stage", {
             /**
@@ -13545,7 +13545,7 @@ var egret;
                 if (!this.root) {
                     this.initialize();
                 }
-                sys.$ticker.$addPlayer(this);
+                egret.ticker.$addPlayer(this);
             };
             /**
              * @private
@@ -13587,7 +13587,7 @@ var egret;
                     return;
                 }
                 this.isPlaying = false;
-                sys.$ticker.$removePlayer(this);
+                egret.ticker.$removePlayer(this);
             };
             /**
              * @private
@@ -13797,7 +13797,7 @@ var egret;
                 this.costRender += costRender;
                 this.costTicker += costTicker;
                 if (this.totalTime >= 1000) {
-                    var lastFPS = Math.min(Math.ceil(this.totalTick * 1000 / this.totalTime), sys.$ticker.$frameRate);
+                    var lastFPS = Math.min(Math.ceil(this.totalTick * 1000 / this.totalTime), egret.ticker.$frameRate);
                     var lastDrawCalls = Math.round(this.drawCalls / this.totalTick);
                     var lastDirtyRatio = Math.round(this.dirtyRatio / this.totalTick);
                     var lastCostDirty = Math.round(this.costDirty / this.totalTick);
@@ -14630,7 +14630,6 @@ var egret;
          */
         sys.$requestRenderingFlag = false;
         /**
-         * @private
          * Egret心跳计时器
          */
         var SystemTicker = (function () {
@@ -14655,13 +14654,21 @@ var egret;
                  * 全局帧率
                  */
                 this.$frameRate = 30;
+                /**
+                 * @private
+                 */
                 this.lastTimeStamp = 0;
                 /**
                  * @private
                  * ticker 花销的时间
                  */
                 this.costEnterFrame = 0;
-                if (true && sys.$ticker) {
+                /**
+                 * @private
+                 * 是否被暂停
+                 */
+                this.isPaused = false;
+                if (true && egret.ticker) {
                     egret.$error(1008, "egret.sys.SystemTicker");
                 }
                 sys.$START_TIME = Date.now();
@@ -14769,6 +14776,12 @@ var egret;
                 this.lastCount = this.frameInterval = Math.round(60000 / value);
                 return true;
             };
+            SystemTicker.prototype.pause = function () {
+                this.isPaused = true;
+            };
+            SystemTicker.prototype.resume = function () {
+                this.isPaused = false;
+            };
             /**
              * @private
              * 执行一次刷新
@@ -14780,6 +14793,10 @@ var egret;
                 var length = callBackList.length;
                 var requestRenderingFlag = sys.$requestRenderingFlag;
                 var timeStamp = egret.getTimer();
+                if (this.isPaused) {
+                    this.lastTimeStamp = timeStamp;
+                    return;
+                }
                 this.callLaterAsyncs();
                 for (var i = 0; i < length; i++) {
                     if (callBackList[i].call(thisObjectList[i], timeStamp)) {
@@ -14906,12 +14923,47 @@ var egret;
         }());
         sys.SystemTicker = SystemTicker;
         __reflect(SystemTicker.prototype, "egret.sys.SystemTicker");
-        /**
-         * @private
-         * 心跳计时器单例
-         */
-        sys.$ticker = new sys.SystemTicker();
     })(sys = egret.sys || (egret.sys = {}));
+})(egret || (egret = {}));
+(function (egret) {
+    /**
+     * 心跳计时器单例
+     */
+    egret.$ticker = new egret.sys.SystemTicker();
+    var lifecycle;
+    (function (lifecycle) {
+        var isActivate = true;
+        lifecycle.context = {
+            onPause: function () {
+                //console.log("pauseApp");
+                egret_native.Audio.pauseBackgroundMusic();
+                egret_native.Audio.pauseAllEffects();
+                if (isActivate) {
+                    isActivate = false;
+                    lifecycle.stage.dispatchEvent(new egret.Event(egret.Event.DEACTIVATE));
+                    if (lifecycle.onPause) {
+                        lifecycle.onPause();
+                    }
+                }
+            },
+            onResume: function () {
+                //console.log("resumeApp");
+                egret_native.Audio.resumeBackgroundMusic();
+                egret_native.Audio.resumeAllEffects();
+                if (!isActivate) {
+                    lifecycle.stage.dispatchEvent(new egret.Event(egret.Event.ACTIVATE));
+                    if (lifecycle.onResume) {
+                        lifecycle.onResume();
+                    }
+                }
+            }
+        };
+        function addLifecycleListener(plugin) {
+            plugin(lifecycle.context);
+        }
+        lifecycle.addLifecycleListener = addLifecycleListener;
+    })(lifecycle = egret.lifecycle || (egret.lifecycle = {}));
+    egret.ticker = new egret.sys.SystemTicker();
 })(egret || (egret = {}));
 if (true) {
     egret_stages = [];
@@ -23868,10 +23920,10 @@ var egret;
              * @language zh_CN
              */
             get: function () {
-                return egret.sys.$ticker.$frameRate;
+                return egret.ticker.$frameRate;
             },
             set: function (value) {
-                egret.sys.$ticker.$setFrameRate(value);
+                egret.ticker.$setFrameRate(value);
             },
             enumerable: true,
             configurable: true
@@ -24685,7 +24737,7 @@ var egret;
                 return;
             this.lastCount = this.updateInterval;
             this.lastTimeStamp = egret.getTimer();
-            egret.sys.$ticker.$startTick(this.$update, this);
+            egret.ticker.$startTick(this.$update, this);
             this._running = true;
         };
         /**
@@ -25510,7 +25562,7 @@ var egret;
         if (true && !callBack) {
             egret.$error(1003, "callBack");
         }
-        egret.sys.$ticker.$startTick(callBack, thisObject);
+        egret.ticker.$startTick(callBack, thisObject);
     }
     egret.startTick = startTick;
 })(egret || (egret = {}));
@@ -25567,7 +25619,7 @@ var egret;
         if (true && !callBack) {
             egret.$error(1003, "callBack");
         }
-        egret.sys.$ticker.$stopTick(callBack, thisObject);
+        egret.ticker.$stopTick(callBack, thisObject);
     }
     egret.stopTick = stopTick;
 })(egret || (egret = {}));

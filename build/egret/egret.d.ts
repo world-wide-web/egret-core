@@ -9826,7 +9826,6 @@ declare namespace egret.sys {
      */
     let $requestRenderingFlag: boolean;
     /**
-     * @private
      * Egret心跳计时器
      */
     class SystemTicker {
@@ -9882,7 +9881,13 @@ declare namespace egret.sys {
          * @private
          */
         private frameInterval;
+        /**
+         * @private
+         */
         private frameDeltaTime;
+        /**
+         * @private
+         */
         private lastTimeStamp;
         /**
          * @private
@@ -9898,6 +9903,13 @@ declare namespace egret.sys {
          * ticker 花销的时间
          */
         private costEnterFrame;
+        /**
+         * @private
+         * 是否被暂停
+         */
+        private isPaused;
+        pause(): void;
+        resume(): void;
         /**
          * @private
          * 执行一次刷新
@@ -9927,11 +9939,27 @@ declare namespace egret.sys {
          */
         private callLaterAsyncs();
     }
+}
+declare module egret {
     /**
-     * @private
      * 心跳计时器单例
      */
-    let $ticker: SystemTicker;
+    let $ticker: sys.SystemTicker;
+    namespace lifecycle {
+        type LifecyclePlugin = (context: typeof lifecycle.context) => void;
+        /**
+         * @private
+         */
+        let stage: egret.Stage;
+        let context: {
+            onPause: () => void;
+            onResume: () => void;
+        };
+        let onResume: () => void;
+        let onPause: () => void;
+        function addLifecycleListener(plugin: LifecyclePlugin): void;
+    }
+    let ticker: sys.SystemTicker;
 }
 /**
  * @private
