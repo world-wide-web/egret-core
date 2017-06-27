@@ -210,7 +210,7 @@ namespace egret {
         public set texture(value: Texture) {
             let self = this;
             self.$setBitmapData(value);
-            if(self.$renderNode) {
+            if(value && self.$renderNode) {
                 (<sys.BitmapNode>self.$renderNode).rotated = value.$rotated;
             }
         }

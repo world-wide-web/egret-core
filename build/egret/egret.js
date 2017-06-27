@@ -4518,7 +4518,7 @@ var egret;
             set: function (value) {
                 var self = this;
                 self.$setBitmapData(value);
-                if (self.$renderNode) {
+                if (value && self.$renderNode) {
                     self.$renderNode.rotated = value.$rotated;
                 }
             },
