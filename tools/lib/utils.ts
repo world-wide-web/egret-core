@@ -189,12 +189,19 @@ export function open(target, appName?) {
 export async function executeCommand(command: string) {
     return new Promise<{ error: Error, stdout: string, stderr: string }>((reslove, reject) => {
         cp.exec(command, {}, (error, stdout, stderr) => {
-            reslove({ error, stdout, stderr })
+            reslove({ error, stdout, stderr });
         });
     })
 }
 
-
+export async function executeCommandWithSpawn(command: string, args?:string[]) {
+    return new Promise<{ code: number }>((reslove, reject) => {
+        const ls = cp.spawn(command, args, { stdio: 'inherit', shell: true });
+        ls.on("exit", function (code: number, signal: string) {
+            reslove({ code });
+        });
+    })
+}
 
 export function endWith(text: string, match: string) {
     return text.lastIndexOf(match) == (text.length - match.length);

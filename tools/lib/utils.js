@@ -238,6 +238,19 @@ function executeCommand(command) {
     });
 }
 exports.executeCommand = executeCommand;
+function executeCommandWithSpawn(command, args) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (reslove, reject) {
+                    var ls = cp.spawn(command, args, { stdio: 'inherit', shell: true });
+                    ls.on("exit", function (code, signal) {
+                        reslove({ code: code });
+                    });
+                })];
+        });
+    });
+}
+exports.executeCommandWithSpawn = executeCommandWithSpawn;
 function endWith(text, match) {
     return text.lastIndexOf(match) == (text.length - match.length);
 }

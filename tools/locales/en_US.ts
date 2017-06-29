@@ -42,6 +42,7 @@ locale_strings[5] = "Compile failed";
 locale_strings[6] = "manifest.json generated successfully";
 locale_strings[7] = "Total time for native copy: {0} second";
 locale_strings[8] = "Project modules can not use both gui and eui, and the eui module is recommended";
+locale_strings[9] = "EgretLauncher version is low, please install the latest version";
 
 locale_strings[1050] = 'Could not find module at ${0}'
 //create
