@@ -45,10 +45,10 @@ var Install = (function () {
                 switch (_a.label) {
                     case 0:
                         execPath = process.execPath;
-                        npmCliPath = FileUtil.joinPath(execPath.slice(0, execPath.length - 4), "npm", "bin", "npm-cli.js");
+                        npmCliPath = FileUtil.joinPath(execPath, "../", "npm", "bin", "npm-cli.js");
                         if (!FileUtil.exists(npmCliPath)) return [3 /*break*/, 2];
                         process.chdir(egret.args.projectDir);
-                        return [4 /*yield*/, utils.executeCommandWithSpawn("node", ["'" + npmCliPath + "'", "install"])];
+                        return [4 /*yield*/, utils.executeCommandWithSpawn("node", ["\"" + npmCliPath + "\"", "install"])];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 3];

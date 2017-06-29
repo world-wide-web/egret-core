@@ -4,10 +4,10 @@ import utils = require('../lib/utils');
 class Install implements egret.Command {
     async execute() {
         let execPath = process.execPath;
-        let npmCliPath = FileUtil.joinPath(execPath.slice(0, execPath.length - 4), "npm", "bin", "npm-cli.js");
+        let npmCliPath = FileUtil.joinPath(execPath, "../", "npm", "bin", "npm-cli.js");
         if(FileUtil.exists(npmCliPath)) {
             process.chdir(egret.args.projectDir);
-            await utils.executeCommandWithSpawn("node", ["'" + npmCliPath + "'", "install"]);
+            await utils.executeCommandWithSpawn("node", ["\"" + npmCliPath + "\"", "install"]);
         }
         else {
             utils.exit(9);
