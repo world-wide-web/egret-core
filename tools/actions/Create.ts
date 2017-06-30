@@ -10,6 +10,7 @@ import doT = require('../lib/doT');
 import EgretProject = require('../project/EgretProject');
 var TemplatesRoot = "tools/templates/";
 import Clean = require('../commands/clean');
+import Install = require('../commands/install');
 
 class Create implements egret.Command {
     project: egret.EgretProjectConfig;
@@ -27,9 +28,14 @@ class Create implements egret.Command {
         FileUtil.copy(template, project.getProjectRoot());
         compileTemplate(proj);
         project.reload();
-
+        if(!project.isES6) {
+            console.log(utils.tr(10017));
+        }
+        else {
+            let install = new Install();
+            await install.execute();
+        }
         new Clean().execute();
-        console.log(utils.tr(10017));
         return Promise.resolve(DontExitCode);
     }
 }

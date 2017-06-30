@@ -497,6 +497,21 @@
           "media",
           "res"
         ]
+      },
+      {
+        "name": "es6",
+        "displayName": "ES6 示例项目",
+        "language": "TypeScript",
+        "tag": "game,app,TypeScript,ES6",
+        "description": "ES6 示例项目",
+        "defaultWidth": 640,
+        "defaultHeight": 1136,
+        "modules": [
+          "egret",
+          "game",
+          "tween",
+          "res"
+        ]
       }
     ],
     "scaleModes": [

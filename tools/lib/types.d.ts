@@ -105,6 +105,9 @@ declare module egret {
         "template"?:{
             
         },
+        "es6"?:{
+            
+        },
         "native"?: {
             "path_ignore"?: string[];
         },

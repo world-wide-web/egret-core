@@ -41,26 +41,39 @@ var doT = require("../lib/doT");
 var EgretProject = require("../project/EgretProject");
 var TemplatesRoot = "tools/templates/";
 var Clean = require("../commands/clean");
+var Install = require("../commands/install");
 var Create = (function () {
     function Create() {
     }
     Create.prototype.execute = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var proj, options, project, emptyTemplate, template;
+            var proj, options, project, emptyTemplate, template, install;
             return __generator(this, function (_a) {
-                proj = this.project;
-                options = egret.args;
-                project = EgretProject.data;
-                projectAction.normalize(proj);
-                emptyTemplate = FileUtil.joinPath(egret.root, TemplatesRoot + "empty");
-                template = FileUtil.joinPath(egret.root, TemplatesRoot + proj.type);
-                FileUtil.copy(emptyTemplate, project.getProjectRoot());
-                FileUtil.copy(template, project.getProjectRoot());
-                compileTemplate(proj);
-                project.reload();
-                new Clean().execute();
-                console.log(utils.tr(10017));
-                return [2 /*return*/, Promise.resolve(DontExitCode)];
+                switch (_a.label) {
+                    case 0:
+                        proj = this.project;
+                        options = egret.args;
+                        project = EgretProject.data;
+                        projectAction.normalize(proj);
+                        emptyTemplate = FileUtil.joinPath(egret.root, TemplatesRoot + "empty");
+                        template = FileUtil.joinPath(egret.root, TemplatesRoot + proj.type);
+                        FileUtil.copy(emptyTemplate, project.getProjectRoot());
+                        FileUtil.copy(template, project.getProjectRoot());
+                        compileTemplate(proj);
+                        project.reload();
+                        if (!!project.isES6) return [3 /*break*/, 1];
+                        console.log(utils.tr(10017));
+                        return [3 /*break*/, 3];
+                    case 1:
+                        install = new Install();
+                        return [4 /*yield*/, install.execute()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        new Clean().execute();
+                        return [2 /*return*/, Promise.resolve(DontExitCode)];
+                }
             });
         });
     };

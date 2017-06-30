@@ -1,0 +1,16 @@
+{
+  "name": "egret",
+  "version": "0.0.1",
+  "scripts": {
+    "watch": "watchify src/Main.ts -p tsify --debug -o libs/main.js -v",
+    "compile": "browserify src/Main.ts -p tsify --debug -o libs/main.js",
+    "start": "http-server"
+  },
+  "devDependencies": {
+    "browserify": "14.4.0",
+    "http-server": "^0.10.0",
+    "tsify": "3.0.1",
+    "typescript": "2.3.4",
+    "watchify": "3.9.0"
+  }
+}

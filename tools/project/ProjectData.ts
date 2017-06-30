@@ -264,6 +264,10 @@ export class EgretProjectData {
     get useTemplate(): boolean {
         return this.egretProperties.template != undefined;
     }
+
+    get isES6(): boolean {
+        return this.egretProperties.es6 != undefined;
+    }
 }
 
 export var data = new EgretProjectData();

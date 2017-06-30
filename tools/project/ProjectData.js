@@ -217,6 +217,13 @@ var EgretProjectData = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(EgretProjectData.prototype, "isES6", {
+        get: function () {
+            return this.egretProperties.es6 != undefined;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return EgretProjectData;
 }());
 __decorate([
