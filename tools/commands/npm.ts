@@ -6,8 +6,9 @@ class Install implements egret.Command {
         let execPath = process.execPath;
         let npmCliPath = FileUtil.joinPath(execPath, "../", "npm", "bin", "npm-cli.js");
         if(FileUtil.exists(npmCliPath)) {
-            process.chdir(egret.args.projectDir);
-            await utils.executeCommandWithSpawn("node", ["\"" + npmCliPath + "\"", "install"]);
+            let commands = process.argv.slice(3);
+            commands.unshift("\"" + npmCliPath + "\"");
+            await utils.executeCommandWithSpawn("node", commands);
         }
         else {
             utils.exit(9);

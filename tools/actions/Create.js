@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -41,39 +41,31 @@ var doT = require("../lib/doT");
 var EgretProject = require("../project/EgretProject");
 var TemplatesRoot = "tools/templates/";
 var Clean = require("../commands/clean");
-var Install = require("../commands/install");
 var Create = (function () {
     function Create() {
     }
     Create.prototype.execute = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var proj, options, project, emptyTemplate, template, install;
+            var proj, options, project, emptyTemplate, template;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        proj = this.project;
-                        options = egret.args;
-                        project = EgretProject.data;
-                        projectAction.normalize(proj);
-                        emptyTemplate = FileUtil.joinPath(egret.root, TemplatesRoot + "empty");
-                        template = FileUtil.joinPath(egret.root, TemplatesRoot + proj.type);
-                        FileUtil.copy(emptyTemplate, project.getProjectRoot());
-                        FileUtil.copy(template, project.getProjectRoot());
-                        compileTemplate(proj);
-                        project.reload();
-                        if (!!project.isES6) return [3 /*break*/, 1];
-                        console.log(utils.tr(10017));
-                        return [3 /*break*/, 3];
-                    case 1:
-                        install = new Install();
-                        return [4 /*yield*/, install.execute()];
-                    case 2:
-                        _a.sent();
-                        _a.label = 3;
-                    case 3:
-                        new Clean().execute();
-                        return [2 /*return*/, Promise.resolve(DontExitCode)];
+                proj = this.project;
+                options = egret.args;
+                project = EgretProject.data;
+                projectAction.normalize(proj);
+                emptyTemplate = FileUtil.joinPath(egret.root, TemplatesRoot + "empty");
+                template = FileUtil.joinPath(egret.root, TemplatesRoot + proj.type);
+                FileUtil.copy(emptyTemplate, project.getProjectRoot());
+                FileUtil.copy(template, project.getProjectRoot());
+                compileTemplate(proj);
+                project.reload();
+                if (!project.isES6) {
+                    console.log(utils.tr(10017));
                 }
+                else {
+                    console.log(utils.tr(10022));
+                }
+                new Clean().execute();
+                return [2 /*return*/, Promise.resolve(DontExitCode)];
             });
         });
     };

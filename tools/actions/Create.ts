@@ -10,7 +10,6 @@ import doT = require('../lib/doT');
 import EgretProject = require('../project/EgretProject');
 var TemplatesRoot = "tools/templates/";
 import Clean = require('../commands/clean');
-import Install = require('../commands/install');
 
 class Create implements egret.Command {
     project: egret.EgretProjectConfig;
@@ -32,8 +31,7 @@ class Create implements egret.Command {
             console.log(utils.tr(10017));
         }
         else {
-            let install = new Install();
-            await install.execute();
+            console.log(utils.tr(10022));
         }
         new Clean().execute();
         return Promise.resolve(DontExitCode);
