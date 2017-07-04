@@ -45,7 +45,7 @@ var Install = (function () {
                 switch (_a.label) {
                     case 0:
                         execPath = process.execPath;
-                        npmCliPath = FileUtil.joinPath(execPath, "../", "npm", "bin", "npm-cli.js");
+                        npmCliPath = FileUtil.joinPath(execPath, "../", "npm", "cli.js");
                         if (!FileUtil.exists(npmCliPath)) return [3 /*break*/, 2];
                         commands = process.argv.slice(3);
                         commands.unshift("\"" + npmCliPath + "\"");
