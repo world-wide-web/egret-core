@@ -96,10 +96,20 @@ function updateSetting(merge) {
                 case "content":
                     exmlEl = { path: e.path, content: e.content };
                     break;
-                case "gjs":
+                case "gjs": {
                     var result = parser.parse(e.content);
                     exmlEl = { path: e.path, gjs: result.code, className: result.className };
                     break;
+                }
+                case "file": {
+                    var result = parser.parse(e.content);
+                    var code = "var clazz = " + result.code + "\negret.registerClass(clazz, \"" + result.className + "\");";
+                    var path_1 = file.joinPath(egret.args.releaseDir, e.path);
+                    setTimeout(function () { return file.remove(path_1); }, 1000);
+                    file.save(path_1 + '.js', code);
+                    exmlEl = { path: e.path };
+                    break;
+                }
                 //todo
                 case "bin":
                     break;

@@ -107,10 +107,20 @@ export function updateSetting(merge = false) {
                 case "content":
                     exmlEl = { path: e.path, content: e.content };
                     break;
-                case "gjs":
+                case "gjs": {
                     let result = parser.parse(e.content);
                     exmlEl = { path: e.path, gjs: result.code, className: result.className };
                     break;
+                }
+                case "file": {
+                    const result = parser.parse(e.content);
+                    const code = `var clazz = ${result.code}\negret.registerClass(clazz, "${result.className}");`;
+                    const path = file.joinPath(egret.args.releaseDir, e.path);
+                    setTimeout(() => file.remove(path), 1000)
+                    file.save(path + '.js', code);
+                    exmlEl = { path: e.path };
+                    break;
+                }
                 //todo
                 case "bin":
                     break;

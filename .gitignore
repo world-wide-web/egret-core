@@ -37,3 +37,6 @@ src/tsc_config_temp.txt
 .wing/settings.json
 /built
 /tests
+tools/.vscode/settings.json
+
+tools/.vscode/tasks.json
